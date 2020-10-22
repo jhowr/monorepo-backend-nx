@@ -1,0 +1,18 @@
+branch-defaults:
+  default:
+    environment: monorepo-nx-$APPLICATION_NAME-dev
+    group_suffix: null
+global:
+  application_name: monorepo-nx-$APPLICATION_NAME
+  branch: null
+  default_ec2_keyname: null
+  default_platform: Node.js 12 running on 64bit Amazon Linux 2
+  default_region: sa-east-1
+  include_git_submodules: false
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: $PROFILE_NAME
+  repository: null
+  sc: null
+  workspace_type: Application

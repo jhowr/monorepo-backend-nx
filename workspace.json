@@ -48,6 +48,43 @@
             "jestConfig": "apps/user/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "deploy": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "cp ../../../package.json ./",
+                "forwardAllArgs": false
+              },
+              {
+                "command": "mkdir -p .elasticbeanstalk",
+                "forwardAllArgs": false
+              },
+              {
+                "command": "cp ../../../.deploy/dev.config.yml ./.elasticbeanstalk/config.yml",
+                "forwardAllArgs": false
+              },
+              {
+                "command": "sed -i 's/$APPLICATION_NAME/user/g' ./.elasticbeanstalk/config.yml",
+                "forwardAllArgs": false
+              },
+              {
+                "command": "sed -i 's/$PROFILE_NAME/{args.profile_name}/g' ./.elasticbeanstalk/config.yml",
+                "forwardAllArgs": true
+              },
+              {
+                "command": "eb init --profile {args.profile_name}",
+                "forwardAllArgs": false
+              },
+              {
+                "command": "eb deploy",
+                "forwardAllArgs": false
+              }
+            ],
+            "parallel": false,
+            "cwd": "dist/apps/user"
+          }
         }
       }
     }
