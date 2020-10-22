@@ -29,4 +29,4 @@ jobs:
       - run: yarn affected:build --base=develop~1 --head=develop
       - run: yarn affected:lint --base=develop~1 --head=develop
       - run: yarn affected:test --base=develop~1 --head=develop
-      - run: yarn affected:deploy --profile_name=eb-cicd-user
+      - run: yarn affected:deploy --base=develop~1 --head=develop --profile_name=eb-cicd-user
