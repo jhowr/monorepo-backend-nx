@@ -14,7 +14,7 @@
             "outputPath": "dist/apps/user",
             "main": "apps/user/src/main.ts",
             "tsConfig": "apps/user/tsconfig.app.json",
-            "assets": ["apps/user/src/assets"]
+            "assets": ["apps/user/src/environments"]
           },
           "configurations": {
             "production": {
