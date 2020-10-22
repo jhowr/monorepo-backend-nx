@@ -24,9 +24,18 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
       - run: git fetch --no-tags --prune --depth=5 origin develop
       - run: yarn install --frozen-lockfile
       - run: yarn affected:build --base=develop~1 --head=develop
       - run: yarn affected:lint --base=develop~1 --head=develop
       - run: yarn affected:test --base=develop~1 --head=develop
-      - run: yarn affected:deploy --base=develop~1 --head=develop --profile_name=eb-cicd-user
+
+      - name: Configure Elastic Beanstalk CLI
+        uses: jhowr/actions-aws-eb@v1.0.0
+        with:
+          command: 'yarn affected:deploy --base=develop~1 --head=develop --profile_name=eb-cicd-user'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'sa-east-1'
