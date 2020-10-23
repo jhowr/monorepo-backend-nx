@@ -64,7 +64,7 @@ jobs:
           ls -all
 
       - name: Deploy to Elastic Beanstalk
-        uses: jhowr/actions-aws-eb@v1.1.5
+        uses: jhowr/actions-aws-eb@v1.1.6
         with:
           dir: 'dist/apps/user'
           profile: 'eb-cicd-user'
