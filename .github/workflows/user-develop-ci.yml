@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Set microservice app name
         id: set-ms-app-name
-        run: echo '::set-output name=MS_APP_NAME::user'
+        run: echo "::set-output name=MS_APP_NAME::user"
 
       - uses: actions/checkout@v2
         with:
@@ -49,8 +49,7 @@ jobs:
 
       - name: Deploy preparation
         run: |
-          ls ./dist
-          echo ${steps.set-ms-app-name.outputs.MS_APP_NAME}
+          echo ${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}
           cp ./package.json ./dist/apps/user/package.json
           mkdir -p ./dist/apps/user/.elasticbeanstalk
           cp ./.deploy/dev.config.yml ./dist/apps/user/.elasticbeanstalk/config.yml
