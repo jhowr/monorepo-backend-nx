@@ -1,6 +1,3 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: User Develop CI
 
 on:
@@ -22,7 +19,7 @@ jobs:
     steps:
       - name: Set microservice app name
         id: set-ms-app-name
-        run: echo ::set-output name=MS_APP_NAME::user
+        run: echo '::set-output name=MS_APP_NAME::user'
 
       - uses: actions/checkout@v2
         with:
@@ -52,7 +49,6 @@ jobs:
 
       - name: Deploy preparation
         run: |
-          ls ./
           ls ./dist
           echo ${steps.set-ms-app-name.outputs.MS_APP_NAME}
           cp ./package.json ./dist/apps/user/package.json
