@@ -54,11 +54,10 @@ jobs:
       - name: Deploy preparation
         run: |
           cp ./package.json ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/package.json
-          mkdir -p ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk
-          cp ./.deploy/dev.config.yml ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
-          sed -i 's/$APPLICATION_NAME/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/g' ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
-          sed -i 's/$PROFILE_NAME/${{ steps.set-iam-user-name.outputs.AWS_IAM_USER_NAME }}/g' ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
-          cd ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}
+      #          mkdir -p ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk
+      #          cp ./.deploy/dev.config.yml ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
+      #          sed -i 's/$APPLICATION_NAME/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/g' ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
+      #          sed -i 's/$PROFILE_NAME/${{ steps.set-iam-user-name.outputs.AWS_IAM_USER_NAME }}/g' ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
 
       - name: Check Current Folder
         run: |
@@ -69,6 +68,8 @@ jobs:
         with:
           dir: 'dist/apps/user'
           profile: 'eb-cicd-user'
+          region: 'sa-east-1'
+          application_name: 'monorepo-nx-user'
           command: 'deploy monorepo-nx-user-dev --profile=eb-cicd-user --debug'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
