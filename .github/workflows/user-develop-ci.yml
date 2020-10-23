@@ -21,6 +21,10 @@ jobs:
         id: set-ms-app-name
         run: echo "::set-output name=MS_APP_NAME::user"
 
+      - name: Set IAM user name
+        id: set-iam-user-name
+        run: echo "::set-output name=AWS_IAM_USER_NAME::eb-cicd-user"
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -53,7 +57,7 @@ jobs:
           mkdir -p ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk
           cp ./.deploy/dev.config.yml ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
           sed -i 's/$APPLICATION_NAME/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/g' ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
-          sed -i 's/$PROFILE_NAME/${{ secrets.AWS_EB_IAM_USER_NAME }}/g' ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
+          sed -i 's/$PROFILE_NAME/${{ steps.set-iam-user-name.outputs.AWS_IAM_USER_NAME }}/g' ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}/.elasticbeanstalk/config.yml
           cd ./dist/apps/${{ steps.set-ms-app-name.outputs.MS_APP_NAME }}
 
       - name: Check Current Folder
@@ -69,16 +73,3 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'sa-east-1'
-#      - name: Configure AWS Credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: sa-east-1
-
-#      - run: git fetch --no-tags --prune --depth=5 origin develop
-#      - run: yarn install --frozen-lockfile
-#      - run: yarn affected:build --base=develop~1 --head=develop
-#      - run: yarn affected:lint --base=develop~1 --head=develop
-#      - run: yarn affected:test --base=develop~1 --head=develop
-#      - run: yarn affected:deploy --base=develop~1 --head=develop --profile_name=eb-cicd-user
