@@ -42,13 +42,13 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build affected applications
-        run: yarn affected:build --base=origin/develop
+        run: yarn affected:build --base=develop~1 --head=develop
 
       - name: Lint affected applications
-        run: yarn affected:lint --base=origin/develop
+        run: yarn affected:lint --base=develop~1 --head=develop
 
       - name: Test affected applications
-        run: yarn affected:test --base=origin/develop
+        run: yarn affected:test --base=develop~1 --head=develop
 
       - name: Deploy preparation
         run: |
