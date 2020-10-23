@@ -20,6 +20,10 @@ jobs:
         node-version: [14.x]
 
     steps:
+      - name: Set microservice app name
+        id: set-ms-app-name
+        run: echo ::set-output name=MS_APP_NAME::user
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -28,6 +32,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -43,12 +52,15 @@ jobs:
 
       - name: Deploy preparation
         run: |
-          cp ./package.json dist/apps/user
-          mkdir -p dist/apps/user/.elasticbeanstalk
-          cp ./.deploy/dev.config.yml dist/apps/user/.elasticbeanstalk/config.yml
-          sed -i 's/$APPLICATION_NAME/user/g' dist/apps/user/.elasticbeanstalk/config.yml
-          sed -i 's/$PROFILE_NAME/eb-cicd-user/g' dist/apps/user/.elasticbeanstalk/config.yml
-          ls -all dist/apps/user
+          ls ./
+          ls ./dist
+          echo ${steps.set-ms-app-name.outputs.MS_APP_NAME}
+          cp ./package.json ./dist/apps/user/package.json
+          mkdir -p ./dist/apps/user/.elasticbeanstalk
+          cp ./.deploy/dev.config.yml ./dist/apps/user/.elasticbeanstalk/config.yml
+          sed -i 's/$APPLICATION_NAME/user/g' ./dist/apps/user/.elasticbeanstalk/config.yml
+          sed -i 's/$PROFILE_NAME/eb-cicd-user/g' ./dist/apps/user/.elasticbeanstalk/config.yml
+          ls -all ./dist/apps/user
 
 #      - name: Configure AWS Credentials
 #        uses: aws-actions/configure-aws-credentials@v1
