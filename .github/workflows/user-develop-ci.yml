@@ -1,0 +1,46 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: User Develop CI
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'apps/user/**'
+      - 'libs/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Deploy User Develop
+        run: echo 'deploying user develop'
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: sa-east-1
+
+#      - run: git fetch --no-tags --prune --depth=5 origin develop
+#      - run: yarn install --frozen-lockfile
+#      - run: yarn affected:build --base=develop~1 --head=develop
+#      - run: yarn affected:lint --base=develop~1 --head=develop
+#      - run: yarn affected:test --base=develop~1 --head=develop
+#      - run: yarn affected:deploy --base=develop~1 --head=develop --profile_name=eb-cicd-user
