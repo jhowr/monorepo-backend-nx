@@ -68,7 +68,7 @@ jobs:
         uses: jhowr/actions-aws-eb@v1.1.0
         with:
           dir: 'dist/apps/user'
-          command: 'deploy monorepo-nx-user-dev --profile=eb-cicd-user'
+          command: 'deploy monorepo-nx-user-dev --profile=eb-cicd-user --debug'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
