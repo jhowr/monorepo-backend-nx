@@ -29,8 +29,27 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Deploy User Develop
-        run: echo 'deploying user develop'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build affected applications
+        run: yarn affected:build --base=origin/develop
+
+      - name: Lint affected applications
+        run: yarn affected:lint --base=origin/develop
+
+      - name: Test affected applications
+        run: yarn affected:test --base=origin/develop
+
+      - name: Deploy preparation
+        run: |
+          cp ./package.json dist/apps/user
+          mkdir -p dist/apps/user/.elasticbeanstalk
+          cp ./.deploy/dev.config.yml dist/apps/user/.elasticbeanstalk/config.yml
+          sed -i 's/$APPLICATION_NAME/user/g' dist/apps/user/.elasticbeanstalk/config.yml
+          sed -i 's/$PROFILE_NAME/eb-cicd-user/g' dist/apps/user/.elasticbeanstalk/config.yml
+          ls -all dist/apps/user
+
 #      - name: Configure AWS Credentials
 #        uses: aws-actions/configure-aws-credentials@v1
 #        with:

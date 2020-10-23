@@ -1,6 +1,3 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: Common CI
 
 on:
@@ -33,7 +30,15 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - run: git fetch --no-tags --prune --depth=5 origin develop
-      - run: yarn install --frozen-lockfile
-      - run: yarn affected:build --base=origin/develop
-      - run: yarn affected:lint --base=origin/develop
-      - run: yarn affected:test --base=origin/develop
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build affected applications
+        run: yarn affected:build --base=origin/develop
+
+      - name: Lint affected applications
+        run: yarn affected:lint --base=origin/develop
+
+      - name: Test affected applications
+        run: yarn affected:test --base=origin/develop
